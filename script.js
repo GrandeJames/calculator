@@ -4,12 +4,23 @@ let operator = null;
 const operatorButtons = document.querySelectorAll(".operator");
 const displayDiv = document.querySelector(".display");
 const operatorsDiv = document.querySelector(".operators");
-const equalsButton = document.querySelector(".equals");
-const numButtons = document.querySelectorAll(".number");
 
 onOperatorClick();
 onNumClick();
 onEqualsClick();
+onClearClick();
+
+function onClearClick() {
+    const clearButton = document.querySelector(".clear");
+
+    clearButton.addEventListener("click", () => {
+        operands = [0];
+        operator = null;
+        displayDiv.id = "reset";
+        displayDiv.textContent = 0;
+        disableOperators();
+    });
+}
 
 function onOperatorClick() {
     operatorButtons.forEach(operatorButton => {
@@ -24,7 +35,7 @@ function onOperatorClick() {
             if (!(operatorsDiv.classList.contains("active"))) {
                 operatorsDiv.classList.add("active");
             }
-            
+
             if (operator == null) {
                 operator = operatorButton.id;
             }
@@ -44,6 +55,8 @@ function onOperatorClick() {
 }
 
 function onEqualsClick() {
+    const equalsButton = document.querySelector(".equals");
+    
     equalsButton.addEventListener("click", () => {
         disableOperators();
 
@@ -76,6 +89,8 @@ function disableOperators() {
 }
 
 function onNumClick() {
+    const numButtons = document.querySelectorAll(".number");
+
     numButtons.forEach(numButton => {
         numButton.addEventListener("click", () => {
             if (displayDiv.textContent == 0 || displayDiv.id == "reset") {
