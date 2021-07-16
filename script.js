@@ -4,6 +4,8 @@ let operator = null;
 const operatorButtons = document.querySelectorAll(".operator");
 const displayDiv = document.querySelector(".display");
 const operatorsDiv = document.querySelector(".operators");
+const equalsButton = document.querySelector(".equals");
+const numButtons = document.querySelectorAll(".number");
 
 onOperatorClick();
 onNumClick();
@@ -22,6 +24,7 @@ function onOperatorClick() {
             if (!(operatorsDiv.classList.contains("active"))) {
                 operatorsDiv.classList.add("active");
             }
+            
             if (operator == null) {
                 operator = operatorButton.id;
             }
@@ -31,16 +34,8 @@ function onOperatorClick() {
             }
             operands.push(Number(displayDiv.textContent));
 
-            if (operands.length == 2) {
-                console.log("operator = " + operator);
-                console.log("operands[0] = " + operands[0]);
-                console.log("operands[1] = " + operands[1]);
+            displayResults();
 
-                let results = operate(operator, operands[0], operands[1]);
-                display(results);
-                operands.pop();
-                operands[0] = results;
-            }
             operator = operatorButton.id;
             displayDiv.id = "reset";
             
@@ -49,8 +44,6 @@ function onOperatorClick() {
 }
 
 function onEqualsClick() {
-    const equalsButton = document.querySelector(".equals");
-
     equalsButton.addEventListener("click", () => {
         disableOperators();
 
@@ -59,17 +52,20 @@ function onEqualsClick() {
         }
         operands.push(Number(displayDiv.textContent));
 
-        if (operands.length === 2) {
-            let results = operate(operator, operands[0], operands[1]);
-
-            display(results);
-            operands.pop();
-            operands[0] = results;
-        }
+        displayResults();
 
         operator = null;
         displayDiv.id = "reset";
     });
+}
+
+function displayResults() {
+    if (operands.length === 2) {
+        let results = operate(operator, operands[0], operands[1]);
+        display(results);
+        operands.pop();
+        operands[0] = results;
+    }
 }
 
 function disableOperators() {
@@ -80,8 +76,6 @@ function disableOperators() {
 }
 
 function onNumClick() {
-    const numButtons = document.querySelectorAll(".number");
-
     numButtons.forEach(numButton => {
         numButton.addEventListener("click", () => {
             if (displayDiv.textContent == 0 || displayDiv.id == "reset") {
