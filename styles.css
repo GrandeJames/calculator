@@ -9,11 +9,11 @@ body {
 .calc-container {
     display: grid;
     grid-template: "disp disp disp disp"
-                   "clear clear del ops"
+                   "clear clear clear ops"
                    "num7 num8 num9 ops"
                    "num4 num5 num6 ops"
                    "num1 num2 num3 ops"
-                   "num0 dec equal equal";
+                   "num0 equal equal equal";
     background-color: rgba(0, 0, 0, 0.856);
     width: 20vw;
     height: 50vh;
