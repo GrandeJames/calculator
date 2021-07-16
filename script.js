@@ -3,6 +3,7 @@ start();
 function start() {
     onOperatorClick();
     onNumClick();
+    onEqualsClick();
 }
 
 let operands = [];
@@ -22,11 +23,14 @@ function onOperatorClick() {
                 }
                 operatorButton.classList.add("active");
             }
-
             if (!(operatorsDiv.classList.contains("active"))) {
                 operatorsDiv.classList.add("active");
             }
-            
+
+            if (displayDiv.id == "reset") {
+                operator = operatorButton.id;
+                return;
+            }
             operands.push(Number(displayDiv.textContent));
 
             if (operands.length == 2) {
@@ -36,22 +40,69 @@ function onOperatorClick() {
                 operands[0] = results;
             }
             operator = operatorButton.id;
+
+            displayDiv.id = "reset";
         })
+    });
+}
+
+function onEqualsClick() {
+    const equalsButton = document.querySelector(".equals");
+    const operatorsDiv = document.querySelector(".operators");
+    const operatorButtons = document.querySelectorAll(".operator");
+    const displayDiv = document.querySelector(".display");
+
+    equalsButton.addEventListener("click", () => {
+
+       // Stop it from doing anything if didnt add anything new
+
+        if (operatorsDiv.classList.contains("active")) {
+            operatorButtons.forEach(operatorButton => operatorButton.classList.remove("active"));
+            operatorsDiv.classList.remove("active");
+        }
+
+        if (operator == null) {
+            return;
+        }
+
+        operands.push(Number(displayDiv.textContent));
+
+        if (operands.length == 2) {
+            console.log("operating");
+            let results = operate(operator, operands[0], operands[1]);
+            display(results);
+            operands.pop();
+            operands[0] = results;
+        }
     });
 }
 
 function onNumClick() {
     const numButtons = document.querySelectorAll(".number");
     const displayDiv = document.querySelector(".display");
-    const operatorsDiv = document.querySelector(".operators");
 
     numButtons.forEach(numButton => {
         numButton.addEventListener("click", () => {
-            display( (displayDiv.textContent == 0 || (operatorsDiv.classList.contains("active"))) ? numButton.textContent :
-            displayDiv.textContent + numButton.textContent);            
+            if (displayDiv.textContent == 0 || displayDiv.id == "reset") {
+                display(numButton.textContent);
+                if (displayDiv.id == "reset") {
+                    displayDiv.id = numButton.textContent;
+                    console.log(displayDiv.id);
+                    return;
+                }
+            } else {
+                let newNum = displayDiv.textContent + numButton.textContent;
+                display(newNum);
+                displayDiv.id = newNum;
+            }
+            console.log(displayDiv.id);
         });
     });
 }
+
+
+
+
 
 function display(numText) {
     const displayDiv = document.querySelector(".display");
