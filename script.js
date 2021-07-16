@@ -1,18 +1,17 @@
-start();
-
-function start() {
-    onOperatorClick();
-    onNumClick();
-    onEqualsClick();
-}
-
 let operands = [];
 let operator = null;
 
+const operatorButtons = document.querySelectorAll(".operator");
+const displayDiv = document.querySelector(".display");
+const operatorsDiv = document.querySelector(".operators");
+
+
+onOperatorClick();
+onNumClick();
+onEqualsClick();
+
+// Bug: becoming empty after doing equals then operator
 function onOperatorClick() {
-    const operatorButtons = document.querySelectorAll(".operator");
-    const displayDiv = document.querySelector(".display");
-    const operatorsDiv = document.querySelector(".operators");
 
     operatorButtons.forEach(operatorButton => {
         operatorButton.addEventListener("click", () => {
@@ -34,6 +33,9 @@ function onOperatorClick() {
             operands.push(Number(displayDiv.textContent));
 
             if (operands.length == 2) {
+                console.log("operator = " + operator);
+                console.log("operands[0] = " + operands[0]);
+                console.log("operands[1] = " + operands[1]);
                 let results = operate(operator, operands[0], operands[1]);
                 display(results);
                 operands.pop();
@@ -48,13 +50,8 @@ function onOperatorClick() {
 
 function onEqualsClick() {
     const equalsButton = document.querySelector(".equals");
-    const operatorsDiv = document.querySelector(".operators");
-    const operatorButtons = document.querySelectorAll(".operator");
-    const displayDiv = document.querySelector(".display");
 
     equalsButton.addEventListener("click", () => {
-
-       // Stop it from doing anything if didnt add anything new
 
         if (operatorsDiv.classList.contains("active")) {
             operatorButtons.forEach(operatorButton => operatorButton.classList.remove("active"));
@@ -65,21 +62,24 @@ function onEqualsClick() {
             return;
         }
 
+        if (displayDiv.id == "reset") {
+            return;
+        }
         operands.push(Number(displayDiv.textContent));
 
         if (operands.length == 2) {
-            console.log("operating");
             let results = operate(operator, operands[0], operands[1]);
             display(results);
             operands.pop();
             operands[0] = results;
         }
+        displayDiv.id = "reset";
+        operator = null;
     });
 }
 
 function onNumClick() {
     const numButtons = document.querySelectorAll(".number");
-    const displayDiv = document.querySelector(".display");
 
     numButtons.forEach(numButton => {
         numButton.addEventListener("click", () => {
@@ -87,7 +87,6 @@ function onNumClick() {
                 display(numButton.textContent);
                 if (displayDiv.id == "reset") {
                     displayDiv.id = numButton.textContent;
-                    console.log(displayDiv.id);
                     return;
                 }
             } else {
@@ -99,9 +98,6 @@ function onNumClick() {
         });
     });
 }
-
-
-
 
 
 function display(numText) {
