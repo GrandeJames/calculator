@@ -15,7 +15,7 @@ body {
                    "num1 num2 num3 ops"
                    "num0 dec equal equal";
     background-color: rgba(0, 0, 0, 0.856);
-    width: 40vw;
+    width: 20vw;
     height: 50vh;
     border: 5px solid black;
     border-radius: 10px;
@@ -28,6 +28,7 @@ body {
     align-items: center;
     background-color: red;
     color: #fff;
+    width: 100%;
 }
 
 .clear {
